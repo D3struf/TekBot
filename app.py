@@ -52,12 +52,12 @@ def get_Chat_response(text):
     
     predicted_intent = naive_bayes_model.predict(input_text)[0]
     
-    # for intent in data['intents']:
-    #     if intent['tag'] == predicted_intent:
-    #         response = random.choice(intent['responses'])
-    #         break
-    # print('Response: ', response)
-    return predicted_intent
+    for intent in data['intents']:
+        if intent['tag'] == predicted_intent:
+            response = random.choice(intent['responses'])
+            break
+    print('Response: ', response)
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
