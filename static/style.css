@@ -32,7 +32,7 @@ body,html{
 
 }
 .card-footer{
-border-radius: 0 0 15px 15px !important;
+	border-radius: 0 0 15px 15px !important;
 	border-top: 0 !important;
 }
 .container{
@@ -45,24 +45,25 @@ border-radius: 0 0 15px 15px !important;
 	color:white !important;
 }
 .search:focus{
-	 box-shadow:none !important;
-   outline:0px !important;
+	box-shadow:none !important;
+   	outline:0px !important;
 }
 .type_msg{
 	background-color: rgba(0,0,0,0.3) !important;
 	border: 10px!important;
 	color:white !important;
 	height: 40px !important;
-	overflow-y: auto;
 	border-radius: 25px;
 	border-color: rgb(235,11,11);
 	border-style: solid;
 	font-family: 'Verdana';
-	font-size: 13px;
+	font-size: 12px!important;
+	overflow-y: auto;
 }
-	.type_msg:focus{
-	 box-shadow:none !important;
-   outline:0px !important;
+.type_msg:focus{
+	box-shadow:none !important;
+  	outline:0px !important;
+  	font-size: 12px;
 }
 .attach_btn{
 	border-radius: 15px 0 0 15px !important;
@@ -161,10 +162,16 @@ border-radius: 0 0 15px 15px !important;
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-left: 10px;
-	border-radius: 25px;
-	background-color: rgb(82, 172, 255);
+	margin-right:60px;
+	border-radius: 10px;
+	background-color: rgba(0,0,0,0.5);
 	padding: 10px;
 	position: relative;
+	color:white;
+	font-size: 13px;
+	font-family: 'Verdana';
+	width: 340px;
+
 
 }
 .msg_cotainer_send{
