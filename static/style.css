@@ -11,8 +11,8 @@ body,html{
 	margin-bottom: auto;
 }
 .card{
-	height: 500px;
-	width: 500px;
+	height: 550px;
+	width: 650px;
 	border-radius: 15px !important;
 	background: linear-gradient(to bottom, rgb(255,255,255)50%, rgb(133, 7, 7));
 }
@@ -119,6 +119,11 @@ body,html{
 	height: 40px;
 	width: 40px;
 }
+.staffTable, th, td{
+	font-size: 10px;
+	font-size: 'verdana';
+	border: 2px solid;
+}
 .online_icon{
 	position: absolute;
 	height: 10px;
@@ -170,7 +175,6 @@ body,html{
 	color:white;
 	font-size: 13px;
 	font-family: 'Verdana';
-	width: 340px;
 
 
 }

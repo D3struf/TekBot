@@ -55,9 +55,10 @@ def get_Chat_response(text):
     for intent in data['intents']:
         if intent['tag'] == predicted_intent:
             response = random.choice(intent['responses'])
+            context = intent['context_set']
             break
     print('Response: ', response)
-    return response
+    return [response, context]
 
 if __name__ == '__main__':
     app.run(debug=True)
