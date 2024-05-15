@@ -32,9 +32,19 @@
                         
                         
                     </div>
+                    <div class="logo">
+                        <img src="https://onedrive.live.com/embed?resid=6FDF29F6D576EA96%212120&authkey=%21AMC9RgaqAhsA770&width=420&height=355" class="ibon" width="150px" height="150px"/>
+                    </div>
+                    <div class="prompt">
+                        <button class="btn1" style="height:50px;width:300px;" onclick="hideButtonAndDisplayText('What facilities college provide?')">What facilities college provide?</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="hideButtonAndDisplayText('Undergraduate enrollment procedure')" style="float: right">Undergraduate enrollment procedure</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="hideButtonAndDisplayText('Graduate Program admission procedure')">Graduate Program admission procedure</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="hideButtonAndDisplayText('Freshmen enrollment procedure')" style="float: right">Freshmen enrollment procedure</button>
+                        <div id="hideButtonAndDisplayText"></div>
+                    </div>
                     <div class="card-footer">
                         <form id="messageArea" class="input-group">
-                            <input type="text" id="text" name="msg" placeholder="Message TekBot......." autocomplete="off" class="form-control type_msg" required/>
+                            <textarea type="text" id="text" name="msg" placeholder="Message TekBot......." autocomplete="off" class="form-control type_msg" required></textarea>
                             <div class="input-group-append">
                                 <button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
                             </div>
@@ -46,7 +56,47 @@
     </div>
     
     <script>
+        function hideButtonAndDisplayText(text) {
+            const date = new Date();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let am_pm = "AM";
+
+            // Convert hours to 12-hour format and determine AM/PM
+            if (hour >= 12) {
+                am_pm = "PM";
+            }
+            if (hour > 12) {
+                hour -= 12;
+            }
+
+            // Adjusting 0 hours to 12 for 12-hour format
+            if (hour === 0) {
+                hour = 12;
+            }
+
+            // Adding leading zero for minutes if necessary
+            minute = (minute < 10 ? '0' : '') + minute;
+
+            const str_time = hour + ":" + minute + " " + am_pm;
+
+            var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + text + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://onedrive.live.com/embed?resid=15B5D1E39FB2A5B3%21181&authkey=%21AE9owBscxrJtTNo&width=216&height=233" class="rounded-circle user_img_msg"></div></div>';
+            
+            $("#messageFormeight").append(userHtml);
+            $(".btn1").hide(); // Hide all buttons when a message is sent
+            $(".ibon").hide(); // Hide logo when a message is sent
+        }
         $(document).ready(function() {
+            // Add event listener for keydown event on the textarea
+            $("#text").on("keydown", function(event) {
+                // If Enter key is pressed
+                if (event.keyCode === 13) {
+                    // Prevent default behavior (creating a new line)
+                    event.preventDefault();
+                    // Trigger the form submission
+                    $("#send").click();
+                }
+            });
             $("#messageArea").on("submit", function(event) {
                 const date = new Date();
                 let hour = date.getHours();
@@ -88,6 +138,10 @@
                     $("#messageFormeight").append($.parseHTML(botHtml));
                 });
                 event.preventDefault();
+            });
+            $("#messageArea").on("click", function(event) {
+                $(".ibon").hide();
+                $(".btn1").hide(); 
             });
         });
     </script>
