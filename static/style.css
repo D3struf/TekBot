@@ -101,19 +101,23 @@ body,html{
 .user_img{
 	height: 40px;
 	width: 40px;
-	border:1.5px solid #f5f6fa;
+	border:1.5px solid black;
 
 }
 .user_img_msg{
 	height: 40px;
 	width: 40px;
-	border:1.5px solid #f5f6fa;
+	border:1.5px solid black;
 
 }
 .img_cont{
 	position: relative;
 	height: 40px;
 	width: 40px;
+}
+.padding
+{
+	padding:5px;
 }
 .img_cont_msg{
 	height: 40px;
