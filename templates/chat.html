@@ -32,9 +32,20 @@
                         
                         
                     </div>
+                    <div class="logo">
+                        <img class="ibon" src="{{ url_for('static', filename='../static/TEKBOT (1).png') }}"/>
+                        <h5 id="h5">How can i help you?</h5>
+                    </div>
+                    <div class="prompt">
+                        <button class="btn1" style="height:50px;width:300px;" onclick="setTextareaText('What facilities college provide?')">What facilities college provide?</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="setTextareaText('Undergraduate enrollment procedure')" style="float: right">Undergraduate enrollment procedure</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="setTextareaText('Graduate Program admission procedure')">Graduate Program admission procedure</button>
+                        <button class="btn1" style="height:50px;width:300px;" onclick="setTextareaText('Freshmen enrollment procedure')" style="float: right">Freshmen enrollment procedure</button>
+                        <div id="hideButtonAndDisplayText"></div>
+                    </div>
                     <div class="card-footer">
                         <form id="messageArea" class="input-group">
-                            <input type="text" id="text" name="msg" placeholder="Message TekBot......." autocomplete="off" class="form-control type_msg" required/>
+                            <textarea type="text" id="text" name="msg" placeholder="Message TekBot......." autocomplete="off" class="form-control type_msg" required></textarea>
                             <div class="input-group-append">
                                 <button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
                             </div>
@@ -46,7 +57,25 @@
     </div>
     
     <script>
+        function setTextareaText(text) {
+            var textarea = document.getElementById('text');
+            textarea.value = text;
+            $(".ibon").hide();
+            $(".btn1").hide();
+            $("#h5").hide();
+        }
+        
         $(document).ready(function() {
+            // Add event listener for keydown event on the textarea
+            $("#text").on("keydown", function(event) {
+                // If Enter key is pressed
+                if (event.keyCode === 13) {
+                    // Prevent default behavior (creating a new line)
+                    event.preventDefault();
+                    // Trigger the form submission
+                    $("#send").click();
+                }
+            });
             $("#messageArea").on("submit", function(event) {
                 const date = new Date();
                 let hour = date.getHours();
