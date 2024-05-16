@@ -11,11 +11,14 @@ import json
 import pickle
 from nltk.stem import WordNetLemmatizer
 
+# Tekbot-without-training
+from chat_Tekbot import get_Chat_response
+
 # Download NLTK data
 nltk.download('punkt')
 nltk.download('wordnet')
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 @app.route("/")
 def index():
@@ -44,20 +47,21 @@ def preprocess_input(text):
     lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
     return ' '.join(lemmatized_tokens)
 
-def get_Chat_response(text):    
-    naive_bayes_model, vectorizer, data = load_model()
+# def get_Chat_response(text):    
+#     naive_bayes_model, vectorizer, data = load_model()
     
-    input_text = preprocess_input(text)
-    input_text = vectorizer.transform([input_text])
+#     input_text = preprocess_input(text)
+#     input_text = vectorizer.transform([input_text])
     
-    predicted_intent = naive_bayes_model.predict(input_text)[0]
+#     predicted_intent = naive_bayes_model.predict(input_text)[0]
     
-    for intent in data['intents']:
-        if intent['tag'] == predicted_intent:
-            response = random.choice(intent['responses'])
-            break
-    print('Response: ', response)
-    return response
+#     for intent in data['intents']:
+#         if intent['tag'] == predicted_intent:
+#             response = random.choice(intent['responses'])
+#             context = intent['context_set']
+#             break
+#     print('Response: ', response)
+#     return [response, context]
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/style.css')}}"/>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -19,7 +19,7 @@
                     <div class="card-header msg_head">
                         <div class="d-flex bd-highlight">
                             <div class="img_cont">
-                                <img src="https://onedrive.live.com/embed?resid=15B5D1E39FB2A5B3%21179&authkey=%21AJZCjHDtRkz8izM&width=170&height=207" class="rounded-circle user_img">
+                                <img src="{{ url_for('static', filename='../static/img/download-removebg-preview (3).png') }}" class="rounded-circle user_img">
                                 <span class="online_icon"></span>
                             </div>
                             <div class="user_info">
@@ -65,14 +65,13 @@
                 if (hour === 0) {
                     hour = 12;
                 }
-
+                
                 // Adding leading zero for minutes if necessary
                 minute = (minute < 10 ? '0' : '') + minute;
 
                 const str_time = hour + ":" + minute + " " + am_pm;
-
                 var rawText = $("#text").val();
-                var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://onedrive.live.com/embed?resid=15B5D1E39FB2A5B3%21181&authkey=%21AE9owBscxrJtTNo&width=216&height=233" class="rounded-circle user_img_msg"></div></div>';
+                var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="{{ url_for("static", filename="../static/img/download-removebg-preview (3).png") }}" class="rounded-circle user_img" class="rounded-circle user_img_msg"></div></div>';
                 
                 $("#text").val("");
                 $("#messageFormeight").append(userHtml);
@@ -84,11 +83,53 @@
                     type: "POST",
                     url: "/get",
                 }).done(function(data) {
-                    var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
-                    $("#messageFormeight").append($.parseHTML(botHtml));
+                    let botHtml = '';
+                    if (data[1].localeCompare('table') === 0){
+                        const uniqueTableId = 'staffTable_' + new Date().getTime();
+                        console.log("DATA 1", data[1] )
+                        console.log("unique ID", uniqueTableId )
+                        botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + 
+                            '<table class="staffTable" id="' + uniqueTableId + '" border="5"><thead><tr><th>Designation</th><th>Email</th><th>Name</th></tr></thead><tbody></tbody></table>'
+                            + '<span class="msg_time">' + str_time + '</span></div></div>';
+                        $("#messageFormeight").append($.parseHTML(botHtml));
+                        generateTable(data[0], uniqueTableId);
+                    }
+                    else if (data[1].localeCompare('table1') === 0){
+                        const uniqueTableId = 'staffTable_' + new Date().getTime();
+                        console.log("DATA 1", data[1])
+                        console.log("unique ID", uniqueTableId )
+                        botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + 
+                            '<table class="staffTable" id="' + uniqueTableId + '" border="5"><thead><tr><th>Office/Unit</th><th>Email</th><th>Name</th><th>Designation</th></tr></thead><tbody></tbody></table>'
+                            + '<span class="msg_time">' + str_time + '</span></div></div>';
+                        $("#messageFormeight").append($.parseHTML(botHtml));
+                        generateTable(data[0], uniqueTableId);
+                    }
+                    else {
+                        botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data[0] + '<span class="msg_time">' + str_time + '</span></div></div>';
+                        $("#messageFormeight").append($.parseHTML(botHtml));
+                    }
                 });
+                
                 event.preventDefault();
             });
+            function generateTable(data, tableId) {
+                const tableBody = document.querySelector("#" + tableId + " tbody");
+                console.log("unique ID", data )
+                if (!tableBody) {
+                    console.error("Table body not found");
+                    return; // Exit early if table body is not found
+                }
+        
+                data.forEach(item => {
+                    const row = document.createElement("tr");
+                    Object.values(item).forEach(text => {
+                        const cell = document.createElement("td");
+                        cell.textContent = text;
+                        row.appendChild(cell);
+                    });
+                    tableBody.appendChild(row);
+                });
+            };
         });
     </script>
 </body>

@@ -1,17 +1,23 @@
 import nltk
 import random
 import json
+import os
+import pickle
 from nltk.corpus import wordnet
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem import WordNetLemmatizer
+from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
 import warnings
 warnings.filterwarnings('ignore')
 from sklearn.metrics import accuracy_score
 
 # Load intents from JSON file
-with open("./data/intents.json", 'r') as file:
+with open("./data/intents.json", 'r', encoding='utf-8') as file:
     intents = json.load(file)
 
 # Function to perform synonym replacement
@@ -74,26 +80,13 @@ def naive_bayes_model(X, y, test_size=0.2):
 
 naive_model = naive_bayes_model(X, y)
 
-def preprocess_input(text):
-    tokens = nltk.word_tokenize(text.lower())
-    tokens = [token for token in tokens if len(token) > 1]
-    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
-    return ' '.join(lemmatized_tokens)
+if not os.path.exists('./model'):
+    os.makedirs('model')
 
-def chatbot_response(user_input):
-    user_input = preprocess_input(user_input)
-    print(user_input)
-    input_text = vectorizer.transform([user_input])
-    # print('Input Text: ', input_text)
-    
-    predicted_intent = naive_model.predict(input_text)[0]
-    
-    for intent in intents['intents']:
-        if intent['tag'] == predicted_intent:
-            response = random.choice(intent['responses'])
-            break
-    
-    return response
+# Save the trained model
+with open('./model/naive_bayes_model.pkl', 'wb') as f:
+    pickle.dump(naive_model, f)
 
-response = chatbot_response('hello')
-print(response)
+# Save the vectorizer
+with open('./model/vectorizer.pkl', 'wb') as f:
+    pickle.dump(vectorizer, f)
