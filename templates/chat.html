@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatbot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TekBot</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='../static/TEKBOT (5).png')}}">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
-
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class="container-fluid h-100">
+    <div id="chatContainer" class="container-fluid h-100" style="display:none;">
         <div class="row justify-content-center h-100">        
             <div class="col-md-8 col-xl-6 chat">
                 <div class="card">
@@ -26,6 +29,7 @@
                                 <span>TekBot</span>
                                 <p>Ask me anything!</p>
                             </div>
+                            <button class="close-chat">&times;</button>
                         </div>
                     </div>
                     <div id="messageFormeight" class="card-body msg_card_body">
@@ -55,8 +59,40 @@
             </div>
         </div>
     </div>
+    <button id="showChatButton" class="btn btn-primary">TekBot</button>
     
     <script>
+        function hideButtonAndDisplayText(text) {
+            const date = new Date();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let am_pm = "AM";
+
+            // Convert hours to 12-hour format and determine AM/PM
+            if (hour >= 12) {
+                am_pm = "PM";
+            }
+            if (hour > 12) {
+                hour -= 12;
+            }
+
+            // Adjusting 0 hours to 12 for 12-hour format
+            if (hour === 0) {
+                hour = 12;
+            }
+
+            // Adding leading zero for minutes if necessary
+            minute = (minute < 10 ? '0' : '') + minute;
+
+            const str_time = hour + ":" + minute + " " + am_pm;
+
+            var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + text + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://onedrive.live.com/embed?resid=15B5D1E39FB2A5B3%21181&authkey=%21AE9owBscxrJtTNo&width=216&height=233" class="rounded-circle user_img_msg"></div></div>';
+            
+            $("#messageFormeight").append(userHtml);
+            $(".btn1").hide(); // Hide all buttons when a message is sent
+            $(".ibon").hide(); // Hide logo when a message is sent
+            $("#h5").hide();
+        }
         function setTextareaText(text) {
             var textarea = document.getElementById('text');
             textarea.value = text;
@@ -66,6 +102,17 @@
         }
         
         $(document).ready(function() {
+            $("#chatContainer").hide();
+
+            $("#showChatButton").on("click", function() {
+                $("#chatContainer").show();
+                $(this).hide();
+            });
+
+            $(".close-chat").on("click", function() {
+                $("#chatContainer").hide();
+                $("#showChatButton").show();
+            });
             // Add event listener for keydown event on the textarea
             $("#text").on("keydown", function(event) {
                 // If Enter key is pressed
@@ -137,9 +184,15 @@
                         botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="{{ url_for("static", filename="../static/Untitled design (3).png") }}" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data[0] + '<span class="msg_time">' + str_time + '</span></div></div>';
                         $("#messageFormeight").append($.parseHTML(botHtml));
                     }
+                    
                 });
                 
                 event.preventDefault();
+            });
+            $("#messageArea").on("click", function(event) {
+                $(".ibon").hide();
+                $(".btn1").hide(); 
+                $("#h5").hide();
             });
             function generateTable(data, tableId) {
                 const tableBody = document.querySelector("#" + tableId + " tbody");
